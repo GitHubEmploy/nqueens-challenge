@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/n_queens_checker.dir/Main2.cpp.o -o n_queens_checker 

@@ -1,0 +1,3 @@
+/home/user/nqueens/c/CMakeFiles/rebuild_cache.dir
+/home/user/nqueens/c/CMakeFiles/edit_cache.dir
+/home/user/nqueens/c/CMakeFiles/n_queens_checker.dir
