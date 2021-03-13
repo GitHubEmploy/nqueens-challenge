@@ -1,2 +1,2 @@
-# nqueens_challenge
+# nqueens-challenge
 Hackerrank nqueens challenge now called "spies revised"
