@@ -31,7 +31,7 @@ function swapToRandomBoardPositionTillNoNeighbors(boardList, position, count) {
     }
   } else {
     if (count > 0){
-      return swapToRandomBoardPositionTillNoNeighbors(boardList, swapPosition, count-1);
+      return swapToRandomBoardPositionTillNoNeighbors(boardList, queenAtSwapPosition, count-1);
     }
     return false;
   }
