@@ -17,6 +17,9 @@ class binaryNode {
       console.error("found a nan", object);
       throw "found nan";
     }
+    if (compared === 0 ) {
+      return true;
+    }
     if (compared < 0) {
       if (this.right == null) {
         return this.right = new binaryNode(object);
@@ -32,10 +35,6 @@ class binaryNode {
         return this.left.add(object);
       }
     }
-    if (compared === 0 ) {
-      return true;
-    }
-    throw "illegal state";
   }
 }
 

@@ -12,7 +12,7 @@ function areNeighborsDiagonal(boardList, index) {
     }
   }
   // check for min out of bounds
-  if (index-1 > 0) {
+  if (index-1 >= 0) {
     if ( Math.abs(boardList[index]-boardList[index-1]) === 1 ) {
       return true;
     }
@@ -28,12 +28,12 @@ function hasColinear(boardList) {
   let slopeIntercept = new slopeInterceptObject();
   let pointA = new point(0, 0);
   let pointB = new point(0, 0);
-  for (i=0;i<boardList.length;i++) {
-    for (j=i+1;j<boardList.length;j++) {
+  for (let i=0;i<boardList.length;i++) {
+    for (let j=i+1;j<boardList.length;j++) {
       pointA = new point(i, boardList[i]);
       pointB = new point(j, boardList[j]);
       slopeIntercept = new slopeInterceptObject(computeSlope(pointA, pointB), computeYIntercept(pointA, pointB));
-      if (slopeIntercept.slope === 1 || slopeIntercept === -1 ) {
+      if (slopeIntercept.slope === 1 || slopeIntercept.slope === -1 ) {
         return true;
       }
       if (tree.add(slopeIntercept) === true ) {
@@ -58,7 +58,7 @@ function isValidSwap(boardList, origionalPosition, swapPosition) {
 // if true, is a valid board
 // if false is not a valid board
 function isValidBoard(boardList) {
-  for (i=0;i<boardList.length;i++) {
+  for (let i=0;i<boardList.length;i++) {
     if (areNeighborsDiagonal(boardList, i)) {
       return false;
     }

@@ -2,27 +2,26 @@ const checks = require("./checks.js");
 const generate = require("./generate.js");
 const output = require("./output.js");
 
+// updated 2
+
 let size = 15;
-let swapCount = Math.floor(size/2);
+let swapCount = 100;
 //             1,000,000,000
-let maxTries = 1000000000;
-let maxRounds = 50;
+let maxTries = 10000000;
+let maxRounds = 1;
 let triesNeeded = 0;
 
-for(rounds=0;rounds<maxRounds;rounds++) {
-  for(tries=0;tries<maxTries;tries++) {
+for (let rounds=0;rounds<maxRounds;rounds++) {
+  for (let tries=0;tries<maxTries;tries++) {
     if(tries%1000000 === 0){
       console.log("try", tries);
     }
     tries = tries + 1;
     boardList = generate.newBoard(size);
     if (!checks.isValidBoard(boardList)){
-      for (i=0;i<boardList;i++){
-        if(!areNeighborsDiagonal(boardList, i)) {
-          if (generate.swapToRandomBoardPositionTillNoNeighbors(boardList, i, swapCount)) {
-            console.log("no Neighbors");
-            break;
-          }
+      for (let i=0;i<boardList.length;i++){
+        if (generate.swapToRandomBoardPositionTillNoNeighbors(boardList, i, swapCount)) {
+          break;
         }
       }
     } else {
@@ -38,5 +37,8 @@ if (checks.isValidBoard(boardList)){
   output.printBoard(boardList);
   console.log(boardList);
   output.printSolution(boardList);
+} else {
+  console.log("no valid solution");
 }
+
 console.log("tries needed average", triesNeeded/maxRounds);
