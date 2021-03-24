@@ -5,4 +5,14 @@ class point {
   }
 }
 
+function computeSlope(pointA, pointB) {
+  return (pointB.y-pointA.y)/(pointB.x-pointA.x);
+}
+
+function computeYIntercept(pointA, pointB) {
+  return (pointB.y - (computeSlope(pointA, PointB) * pointB.x));
+}
+
 exports.point = point;
+exports.computeSlope = computeSlope;
+exports.computeYIntercept = computeYIntercept;
