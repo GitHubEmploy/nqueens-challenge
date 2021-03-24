@@ -40,6 +40,9 @@ board -> slope-tree -> queenLocation -> Interger -> Interger
 countConflictsToMax(board, slope-tree, queenLocation, max)
 return either max conflicts if less than max else return max+1
 
+board -> row -> list
+computeConflictsList(board, row)
+
 int -> int
 getRandomInt(n)
 random % n
@@ -61,6 +64,7 @@ computeYIntercept(pointA, pointB)
 output.js
 point.js
 binaryNode.js
+slopeInterceptObject.js
 
 
 [int] -> int
