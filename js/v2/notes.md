@@ -35,3 +35,39 @@ isValidBoard(board)
 
 board -> slope-tree -> queenLocation -> int
 countConflicts(board, slope-tree, queenLocation)
+
+board -> slope-tree -> queenLocation -> Interger -> Interger
+countConflictsToMax(board, slope-tree, queenLocation, max)
+return either max conflicts if less than max else return max+1
+
+int -> int
+getRandomInt(n)
+random % n
+
+int -> board
+newBoardGreedy(n)
+generate board greedy
+
+newBoardRandom(n)
+uses getRandomInt
+
+
+point -> point -> int
+computeSlope(pointA, pointB)
+
+point -> point -> int
+computeYIntercept(pointA, pointB)
+
+output.js
+point.js
+binaryNode.js
+
+
+[int] -> int
+selectQueenLocationFromConflictsList(conflictsList)
+
+board -> point -> board
+placeQueenOnBoard(board, location)
+removes queen from row and replaces at point
+
+
