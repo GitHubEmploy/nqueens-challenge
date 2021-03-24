@@ -10,17 +10,36 @@ function generateColumnConflictsList(boardList, column) {
   let slopeTree = createSlopeTree(boardList, column);
   let conflictsList = [];
   for (let row=0;row<boardList.length;++row) {
-    queenLocatrowon = new point(column, row);
+    queenLocation = new point(column, row);
     conflictList[i] = countConflicts(board, slopeTree, queenLocation);
   }
+  return conflictsList;
 }
 
-function countConflicts(board, slopeTree, queenLocation) {
+function countConflicts(boardList, slopeTree, queenLocation) {
+  
+
+}
+
+function countConflictsToMax(boardList, slopeTree, queenLocation, max) {
 
 }
 
 function createSlopeTree(boardList, currentWorkingColumn) {
   let tree = new binaryNode();
+  let pointA = new point(0, 0);
+  let pointB = new point(0, 0);
+  let workingCombinationList = removeWorkingColumnFromCombinationList(
+      generateAllCombinations(boardList),
+      currentWorkingColumn);
+  for (let item=0;item<workingCombinationList.length;++item) {
+    [pointA, pointB] = workingCombinationList[item];
+    slopeIntercept = new slopeInterceptObject(
+        computeSlope(pointA, pointB),
+        computeYIntercept(pointA, pointB));
+    tree.add(slopeIntercept);
+  }
+  return tree;
 }
 
 
@@ -36,7 +55,7 @@ function generateAllCombinations(boardList) {
   return combinationList;
 }
 
-function removeWorkingColumnFromCobinationList(combinationList, column) {
+function removeWorkingColumnFromCombinationList(combinationList, column) {
   return combinationList.filter((item) => { 
     let [pointA, pointB] = item;
     if (pointA.x === column || pointB.x === column) {
@@ -46,3 +65,4 @@ function removeWorkingColumnFromCobinationList(combinationList, column) {
   });
 }
 
+exports.removeWorkingColumnFromCombinationList = removeWorkingColumnFromCombinationList
