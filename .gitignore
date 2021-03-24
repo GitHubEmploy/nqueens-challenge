@@ -1,2 +1,4 @@
 tags
 ctags
+package-lock.json
+node_modules

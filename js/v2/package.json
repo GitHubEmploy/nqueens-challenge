@@ -1,0 +1,9 @@
+{
+  "name": "queens",
+  "version": "0.0.1",
+  "description": "nqueens solver",
+  "private": true,
+  "devDependencies": {
+    "mocha": "^8.3.2"
+  }
+}
