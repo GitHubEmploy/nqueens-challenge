@@ -1,9 +1,22 @@
+const helpFunctions = require("./helperFunctions.js");
+
 function placeQueenOnBoard(boardList, location) {
   return boardList[location.x] = location.y;
 }
 
-function selectQueenFromConflictsList () {
-
+function selectQueenRowFromConflictsList (conflictList) {
+  let listOfMins = [];
+  // the conflicts list will be of size n so we can safely assume that the minimum number of conflicts will be less than n
+  let min = conflictList.length+1;
+  for (let i=0;i<conflictsList.length;++i) {
+    if (conflictsList[i] < min) {
+      listOfMins = [i];
+      min = conflictsList[i];
+    } else if (conflictsList[i] === min) {
+      listOfMins.push(i);
+    }
+  }
+  return listOfMins[helperFunctions.randomInt(listOfMins.length-1)];
 }
 
 function generateColumnConflictsList(boardList, column) {
