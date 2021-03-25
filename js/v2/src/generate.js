@@ -6,10 +6,14 @@ const boardFunctions = require("./boardFunctions");
 function newBoardGreedy(n) {
   let boardList = [];
   for (let i=0;i<n;++i) {
+    boardList.push(0);
+  }
+  for (let i=0;i<n;++i) {
     boardFunctions.placeQueenOnBoard(
         boardList,
-        new point (boardFunctions.selectQueenRowFromConflictList(
+        new point (
             i,
+            boardFunctions.selectQueenRowFromConflictList(
             boardFunctions.generateColumnConflictList(
                 boardList,
                 i))));

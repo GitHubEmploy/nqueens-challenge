@@ -19,7 +19,8 @@ function selectQueenRowFromConflictList (conflictList) {
       listOfMins.push(i);
     }
   }
-  return listOfMins[helperFunctions.randomInt(listOfMins.length-1)];
+  let myRandom = helperFunctions.randomInt(listOfMins.length-1)
+  return listOfMins[myRandom];
 }
 
 function generateColumnConflictList(boardList, column) {
@@ -29,7 +30,7 @@ function generateColumnConflictList(boardList, column) {
           column));
   let conflictList = [];
   for (let row=0;row<boardList.length;++row) {
-    queenLocation = new point(column, row);
+    let queenLocation = new point(column, row);
     conflictList[row] = countConflicts(boardList, slopeTree, queenLocation);
   }
   return conflictList;
@@ -39,9 +40,9 @@ function generateColumnConflictList(boardList, column) {
 function countConflicts(boardList, slopeTree, queenLocation) {
   let combinationList = generateSinglePointCombinations(boardList, queenLocation);
   let count = 0;
-  for (let item=0;item<CombinationList.length;++item) {
-    [pointA, pointB] = CombinationList[item];
-    slopeIntercept = new slopeInterceptObject(
+  for (let item=0;item<combinationList.length;++item) {
+    let [pointA, pointB] = combinationList[item];
+    let slopeIntercept = new slopeInterceptObject(
         computeSlope(pointA, pointB),
         computeYIntercept(pointA, pointB));
     if ( slopeIntercept.slope === 1 || slopeIntercept.slope === -1 ) {
@@ -61,8 +62,8 @@ function countConflictsToMax(boardList, slopeTree, queenLocation, max) {
   let combinationList = generateSinglePointCombinations(boardList, queenLocation);
   let count = 0;
   for (let item=0;item<CombinationList.length;++item) {
-    [pointA, pointB] = CombinationList[item];
-    slopeIntercept = new slopeInterceptObject(
+    let [pointA, pointB] = CombinationList[item];
+    let slopeIntercept = new slopeInterceptObject(
         computeSlope(pointA, pointB),
         computeYIntercept(pointA, pointB));
     if ( slopeIntercept.slope === 1 || slopeIntercept.slope === -1 ) {
@@ -85,12 +86,14 @@ function generateSlopeTree(combinationList) {
   let tree = new binaryNode();
   let pointA = new point(0, 0);
   let pointB = new point(0, 0);
-  let slopeIntercept = 0;
   for (let item=0;item<combinationList.length;++item) {
     [pointA, pointB] = combinationList[item];
-    slopeIntercept = new slopeInterceptObject(
+    let slopeIntercept = new slopeInterceptObject(
         computeSlope(pointA, pointB),
         computeYIntercept(pointA, pointB));
+    if (slopeIntercept == null ) {
+      console.log("slopeIntercept was null");
+    }
     tree.add(slopeIntercept);
   }
   return tree;
@@ -101,21 +104,20 @@ function generateAllCombinations(boardList) {
   let combinationList = [];
   for (let i=0;i<boardList.length;++i) {
     for (let j=i+1;j<boardList.length;++j) {
-      pointA = new point(i, boardList[i]);
-      pointB = new point(j, boardList[j]);
+      let pointA = new point(i, boardList[i]);
+      let pointB = new point(j, boardList[j]);
       combinationList.push([pointA, pointB]);
     }
   }
   return combinationList;
 }
 
-function generateSinglePointCombinations(boardList, point) {
+function generateSinglePointCombinations(boardList, comparePoint) {
   let combinationList = [];
-  let listPoint = new point(0, 0);
   for (let i=0;i<boardList.length;++i) {
-    listPoint = new point(i, boardList[i]);
-    if (point.x != listPoint.x) {
-      combinationList.push([point, listPoint]);
+    let listPoint = new point(i, boardList[i]);
+    if (comparePoint.x != listPoint.x) {
+      combinationList.push([comparePoint, listPoint]);
     }
   }
   return combinationList
@@ -135,3 +137,6 @@ exports.placeQueenOnBoard = placeQueenOnBoard;
 exports.selectQueenRowFromConflictList = selectQueenRowFromConflictList;
 exports.generateColumnConflictList = generateColumnConflictList;
 exports.removeWorkingColumnFromCombinationList = removeWorkingColumnFromCombinationList;
+exports.generateAllCombinations = generateAllCombinations;
+exports.generateSlopeTree = generateSlopeTree;
+exports.countConflicts = countConflicts;

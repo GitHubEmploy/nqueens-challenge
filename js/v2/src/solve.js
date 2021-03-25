@@ -1,7 +1,8 @@
 const generate = require("./generate.js");
 const helperFunctions = require("./helperFunctions.js");
 const boardFunctions = require("./boardFunctions.js");
-const {point} = require("./point.js")
+const {point} = require("./point.js");
+const checks = require("./checks.js");
 
 
 let size = 15;
@@ -38,5 +39,5 @@ if (boardErrors === 0){
 } else {
   console.log("not a valid solution, number of errors:", boardErrors);
 }
-console.log("tries needed average", triesNeeded/maxRounds);
+//console.log("tries needed average", triesNeeded/maxRounds);
 
