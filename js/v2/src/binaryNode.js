@@ -31,6 +31,28 @@ class binaryNode {
       }
     }
   }
+
+  find(object) {
+    if (this.value == null) {
+      throw new Error("shouldn't ever see this");
+    }
+    let compared = this.value.compareTo(object);
+    if (compared === 0) {
+      return true;
+    } else if (compared < 0) {
+      if (this.right != null) {
+        return this.right.find(object);
+      } else {
+        return false;
+      }
+    } else if (compared > 0) {
+      if (this.left != null) {
+        return this.left.find(object);
+      } else {
+        return false;
+      }
+    }
+  }
 }
 
 exports.binaryNode = binaryNode;
