@@ -1,5 +1,5 @@
 const {point} = require("./point.js");
-const {randomInt} = require("./helpFunctions.js");
+const {randomInt} = require("./helperFunctions.js");
 const boardFunctions = require("./boardFunctions");
 
 
@@ -8,9 +8,9 @@ function newBoardGreedy(n) {
   for (let i=0;i<n;++i) {
     boardFunctions.placeQueenOnBoard(
         boardList,
-        new point (boardFunctions.selectQueenRowFromConflictsList(
+        new point (boardFunctions.selectQueenRowFromConflictList(
             i,
-            boardFunctions.generateColumnConflictsList(
+            boardFunctions.generateColumnConflictList(
                 boardList,
                 i))));
   }
@@ -28,3 +28,6 @@ function newBoardRandom(n) {
   }
   return boardList;
 }
+
+exports.newBoardGreedy = newBoardGreedy;
+exports.newBoardRandom = newBoardRandom;
