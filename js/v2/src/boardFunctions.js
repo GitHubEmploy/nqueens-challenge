@@ -20,7 +20,10 @@ function selectQueenRowFromConflictsList (conflictList) {
 }
 
 function generateColumnConflictsList(boardList, column) {
-  let slopeTree = createSlopeTree(boardList, column);
+  let slopeTree = createSlopeTree(
+      removeWorkingColumnFromCombinationList(
+          generateAllCombinations(boardList),
+          Column);
   let conflictsList = [];
   for (let row=0;row<boardList.length;++row) {
     queenLocation = new point(column, row);
@@ -75,15 +78,12 @@ function countConflictsToMax(boardList, slopeTree, queenLocation, max) {
   return count;
 }
 
-function createSlopeTree(boardList, currentWorkingColumn) {
+function createSlopeTree(combinationList) {
   let tree = new binaryNode();
   let pointA = new point(0, 0);
   let pointB = new point(0, 0);
-  let workingCombinationList = removeWorkingColumnFromCombinationList(
-      generateAllCombinations(boardList),
-      currentWorkingColumn);
-  for (let item=0;item<workingCombinationList.length;++item) {
-    [pointA, pointB] = workingCombinationList[item];
+  for (let item=0;item<combinationList.length;++item) {
+    [pointA, pointB] = combinationList[item];
     slopeIntercept = new slopeInterceptObject(
         computeSlope(pointA, pointB),
         computeYIntercept(pointA, pointB));
