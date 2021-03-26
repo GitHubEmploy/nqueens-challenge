@@ -1,11 +1,10 @@
 // print board in a grid
 function printBoard(boardList) {
   // flip board as the easy printBoard does by row but the normal board list lists queens by column
-  let flipped = flipBoard(boardList);
   let line = "";
   for (let i=0;i<boardList.length;i++) {
     for (let j=0;j<boardList.length;j++) {
-      if (flipped[i] == j) {
+      if (boardList[i] == j) {
         line = line.concat("X");
       }
       else {

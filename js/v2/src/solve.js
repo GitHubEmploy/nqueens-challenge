@@ -17,7 +17,8 @@ let boardlist = [];
 
 for (let rounds=0;rounds<maxRounds;++rounds) {
   for (let tries=0;tries<maxTries;++tries) {
-    boardList = generate.newBoardGreedy(size);
+    //boardList = generate.newBoardRandom(size);
+    boardList = [0,1,2,3,4,5,6];
     for (let rowCheck=0;rowCheck<maxRowChecks;++rowCheck) {
       let boardErrors = checks.isValidBoard(boardList);
       if (boardErrors === 0){
