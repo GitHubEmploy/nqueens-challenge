@@ -7,9 +7,9 @@ const output = require("./output.js");
 
 
 let size = 9;
-let maxRowChecks = 40;
+let maxRowChecks = 400;
 //             1,000
-let maxTries = 1;
+let maxTries = 100;
 let maxRounds = 1;
 let triesNeededForSolution = 0;
 
@@ -22,18 +22,18 @@ for (let rounds=0;rounds<maxRounds;++rounds) {
       let boardErrors = checks.isValidBoard(boardList);
       if (boardErrors === 0){
         break;
-      } else {
+      } else if (boardErrors === 1) {
         console.log("current conflicts ", boardErrors);
         output.printBoard(boardList);
-        console.log("boardlist ", boardList);
-      }
+        output.printSolution(boardList);
+      } 
       let column = helperFunctions.randomInt(size);
       boardFunctions.placeQueenOnBoard(
           boardList,
           new point(
               column,
               boardFunctions.selectQueenRowFromConflictList(
-                  boardFunctions.generateAllRowConflictsList(
+                  boardFunctions.generateConflictCountFromEachPointInRow(
                       boardList,
                       column))));
     }

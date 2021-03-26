@@ -21,7 +21,7 @@ function printSolution(boardList) {
   for (let i=0;i<boardList.length;i++) {
     outputString = outputString+(boardList[i]+1)+" ";
   }
-  console.log(outputString);
+  console.log("solution: ", outputString);
 }
     
 
