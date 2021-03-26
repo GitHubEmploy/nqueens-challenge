@@ -36,7 +36,7 @@ function generateColumnConflictList(boardList, column) {
   let conflictList = [];
   for (let row=0;row<boardList.length;++row) {
     let queenLocation = new point(column, row);
-    conflictList[row] = countConflicts(boardList, slopeTree, queenLocation);
+    conflictList[row] = countSinglePointConflicts(boardList, slopeTree, queenLocation);
   }
   return conflictList;
 }

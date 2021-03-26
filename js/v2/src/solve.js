@@ -6,47 +6,47 @@ const checks = require("./checks.js");
 const output = require("./output.js");
 
 
-let size = 9;
-let maxRowChecks = 400;
-//             1,000
-let maxTries = 100;
-let maxRounds = 1;
+let size = 50;
+let maxRowChecks = 50;
+//             100
+let maxRounds = 100;
 let triesNeededForSolution = 0;
+let solutionsFound = 0;
+let totalRowChecksNeeded = 0;
+let totalBoardErrors = 0;
 
 let boardlist = [];
 
-for (let rounds=0;rounds<maxRounds;++rounds) {
-  for (let tries=0;tries<maxTries;++tries) {
-    boardList = generate.newBoardRandom(size);
-    for (let rowCheck=0;rowCheck<maxRowChecks;++rowCheck) {
-      let boardErrors = checks.isValidBoard(boardList);
-      if (boardErrors === 0){
-        break;
-      } else if (boardErrors === 1) {
-        console.log("current conflicts ", boardErrors);
-        output.printBoard(boardList);
-        output.printSolution(boardList);
-      } 
-      let column = helperFunctions.randomInt(size);
-      boardFunctions.placeQueenOnBoard(
-          boardList,
-          new point(
-              column,
-              boardFunctions.selectQueenRowFromConflictList(
-                  boardFunctions.generateConflictCountFromEachPointInRow(
-                      boardList,
-                      column))));
+for (let round=0;round<maxRounds;++round) {
+  console.log("average board error amount", totalBoardErrors/maxRowChecks);
+  console.log("starting round", round);
+  boardList = generate.newBoardRandom(size);
+  totalBoardErrors = 0;
+  for (let rowCheck=0;rowCheck<maxRowChecks;++rowCheck) {
+    let boardErrors = checks.isValidBoard(boardList);
+    totalBoardErrors += boardErrors;
+    if (boardErrors === 0){
+      solutionsFound++;
+      totalRowChecksNeeded += rowCheck;
+      console.log("====================================");
+      output.printSolution(boardList);
+      console.log("rowcheck ", rowCheck);
+      console.log("otherboardErrors", totalBoardErrors/rowCheck);
+      break;
     }
+    let column = helperFunctions.randomInt(size);
+    boardFunctions.placeQueenOnBoard(
+        boardList,
+        new point(
+            column,
+            boardFunctions.selectQueenRowFromConflictList(
+                boardFunctions.generateConflictCountFromEachPointInRow(
+                    boardList,
+                    column))));
   }
 }
 
-let boardErrors = checks.isValidBoard(boardList);
-if (boardErrors === 0){
-  output.printBoard(boardList);
-  console.log("actual boardList", boardList);
-  output.printSolution(boardList);
-} else {
-  console.log("not a valid solution, number of errors:", boardErrors);
-}
-console.log("tries needed average", triesNeededForSolution/maxRounds);
+console.log(solutionsFound, "for board of size", size)
+console.log("tries needed average", maxRounds/solutionsFound);
+console.log("average row checks needed", totalRowChecksNeeded/solutionsFound);
 
