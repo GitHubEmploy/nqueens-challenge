@@ -6,7 +6,7 @@ const checks = require("./checks.js");
 const output = require("./output.js");
 
 
-let size = 7;
+let size = 9;
 let maxRowChecks = 40;
 //             1,000
 let maxTries = 1;
@@ -17,8 +17,7 @@ let boardlist = [];
 
 for (let rounds=0;rounds<maxRounds;++rounds) {
   for (let tries=0;tries<maxTries;++tries) {
-    //boardList = generate.newBoardRandom(size);
-    boardList = [0,1,2,3,4,5,6];
+    boardList = generate.newBoardRandom(size);
     for (let rowCheck=0;rowCheck<maxRowChecks;++rowCheck) {
       let boardErrors = checks.isValidBoard(boardList);
       if (boardErrors === 0){
@@ -34,7 +33,7 @@ for (let rounds=0;rounds<maxRounds;++rounds) {
           new point(
               column,
               boardFunctions.selectQueenRowFromConflictList(
-                  boardFunctions.generateAllConflictList(
+                  boardFunctions.generateAllRowConflictsList(
                       boardList,
                       column))));
     }

@@ -9,8 +9,10 @@ function placeQueenOnBoard(boardList, location) {
 
 function selectQueenRowFromConflictList (conflictList) {
   let listOfMins = [];
-  // the conflicts list will be of size n so we can safely assume that the minimum number of conflicts will be less than n
-  let min = conflictList.length+1;
+  // the conflicts list will be of size n
+  // so we can safely assume that the minimum number of conflicts will be less than 3 times n
+  // since at most a point can conflict with another in 3 ways
+  let min = (conflictList.length*3)+1;
   for (let i=0;i<conflictList.length;++i) {
     if (conflictList[i] < min) {
       listOfMins = [i];
@@ -20,6 +22,9 @@ function selectQueenRowFromConflictList (conflictList) {
     }
   }
   let myRandom = helperFunctions.randomInt(listOfMins.length)
+  if (listOfMins.length < 1) {
+    throw "did not find a minimum"
+  }
   return listOfMins[myRandom];
 }
 
@@ -36,18 +41,18 @@ function generateColumnConflictList(boardList, column) {
   return conflictList;
 }
 
-function generateAllConflictList(boardList, column) {
+function generateAllRowConflictsList(boardList, column) {
   let combinationList = generateAllCombinations(boardList);
   let slopeTree = generateSlopeTree(combinationList);
   let conflictList = [];
   for (let row=0;row<boardList.length;++row) {
     let queenLocation = new point(column, row);
-    conflictList[row] = countConflicts(boardList, slopeTree, queenLocation);
+    conflictList[row] = countSinglePointConflicts(boardList, slopeTree, queenLocation);
   }
   return conflictList;
 }
 
-function countConflicts(boardList, slopeTree, queenLocation) {
+function countWholeBoardConflicts(boardList, slopeTree, queenLocation) {
   let combinationList = generateAllCombinations(boardList);
   let count = 0;
   for (let item=0;item<combinationList.length;++item) {
@@ -68,11 +73,32 @@ function countConflicts(boardList, slopeTree, queenLocation) {
   return count;
 }
 
-function countConflictsToMax(boardList, slopeTree, queenLocation, max) {
+function countSinglePointConflicts(boardList, slopeTree, queenLocation) {
   let combinationList = generateSinglePointCombinations(boardList, queenLocation);
   let count = 0;
-  for (let item=0;item<CombinationList.length;++item) {
-    let [pointA, pointB] = CombinationList[item];
+  for (let item=0;item<combinationList.length;++item) {
+    let [pointA, pointB] = combinationList[item];
+    let slopeIntercept = new slopeInterceptObject(
+        computeSlope(pointA, pointB),
+        computeYIntercept(pointA, pointB));
+    if ( slopeIntercept.slope === 1 || slopeIntercept.slope === -1 ) {
+      ++count;
+    } else if ( slopeIntercept.slope === 0 ) {
+      ++count;
+    } else {
+      if (slopeTree.find(slopeIntercept)) {
+        ++count;
+      }
+    }
+  }
+  return count;
+}
+
+function countPointConflictsToMax(boardList, slopeTree, queenLocation, max) {
+  let combinationList = generateSinglePointCombinations(boardList, queenLocation);
+  let count = 0;
+  for (let item=0;item<combinationList.length;++item) {
+    let [pointA, pointB] = combinationList[item];
     let slopeIntercept = new slopeInterceptObject(
         computeSlope(pointA, pointB),
         computeYIntercept(pointA, pointB));
@@ -146,8 +172,8 @@ function removeWorkingColumnFromCombinationList(combinationList, column) {
 exports.placeQueenOnBoard = placeQueenOnBoard;
 exports.selectQueenRowFromConflictList = selectQueenRowFromConflictList;
 exports.generateColumnConflictList = generateColumnConflictList;
-exports.generateAllConflictList = generateAllConflictList;
+exports.generateAllRowConflictsList = generateAllRowConflictsList;
 exports.removeWorkingColumnFromCombinationList = removeWorkingColumnFromCombinationList;
 exports.generateAllCombinations = generateAllCombinations;
 exports.generateSlopeTree = generateSlopeTree;
-exports.countConflicts = countConflicts;
+exports.countWholeBoardConflicts = countWholeBoardConflicts;
