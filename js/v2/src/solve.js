@@ -3,12 +3,13 @@ const helperFunctions = require("./helperFunctions.js");
 const boardFunctions = require("./boardFunctions.js");
 const {point} = require("./point.js");
 const checks = require("./checks.js");
+const output = require("./output.js");
 
 
-let size = 15;
-let maxRowChecks = 100;
+let size = 7;
+let maxRowChecks = 10;
 //             1,000
-let maxTries = 1000;
+let maxTries = 1;
 let maxRounds = 1;
 let triesNeededForSolution = 0;
 
@@ -18,6 +19,14 @@ for (let rounds=0;rounds<maxRounds;++rounds) {
   for (let tries=0;tries<maxTries;++tries) {
     boardList = generate.newBoardGreedy(size);
     for (let rowCheck=0;rowCheck<maxRowChecks;++rowCheck) {
+      let boardErrors = checks.isValidBoard(boardList);
+      if (boardErrors === 0){
+        break;
+      } else {
+        console.log("current conflicts ", boardErrors);
+        output.printBoard(boardList);
+        console.log("boardlist ", boardList);
+      }
       let column = helperFunctions.randomInt(size);
       boardFunctions.placeQueenOnBoard(
           boardList,
@@ -31,7 +40,7 @@ for (let rounds=0;rounds<maxRounds;++rounds) {
   }
 }
 
-boardErrors = checks.isValidBoard(boardList);
+let boardErrors = checks.isValidBoard(boardList);
 if (boardErrors === 0){
   output.printBoard(boardList);
   console.log("actual boardList", boardList);
@@ -39,5 +48,5 @@ if (boardErrors === 0){
 } else {
   console.log("not a valid solution, number of errors:", boardErrors);
 }
-//console.log("tries needed average", triesNeeded/maxRounds);
+console.log("tries needed average", triesNeededForSolution/maxRounds);
 
