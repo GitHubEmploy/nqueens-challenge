@@ -4,10 +4,10 @@ const output = require("./output.js");
 
 // updated 2
 
-let size = 15;
+let size = 7;
 let swapCount = 100;
 //             1,000,000,000
-let maxTries = 10000000;
+let maxTries = 1000000000;
 let maxRounds = 1;
 let triesNeeded = 0;
 

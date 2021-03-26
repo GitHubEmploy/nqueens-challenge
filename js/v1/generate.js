@@ -14,7 +14,6 @@ function newBoard(n) {
 }
 
 function swapToRandomBoardPositionTillNoNeighbors(boardList, position, count) {
-  console.log("swap count", count);
   let swapPosition = newRandomInterger(boardList.length-1);
   let queenAtSwapPosition = boardList[swapPosition];
   boardList[swapPosition] = boardList[position];
