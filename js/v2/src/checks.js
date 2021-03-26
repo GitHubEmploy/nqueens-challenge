@@ -3,12 +3,12 @@ const {point} = require("./point.js");
 
 
 function isValidBoard(boardList) {
-  let count = 0;
-  let slopeTree = boardFunctions.generateSlopeTree(
+  let [slopeTree, count] = boardFunctions.generateSlopeTree(
                   boardFunctions.generateAllCombinations(boardList));
   count = boardFunctions.countWholeBoardConflicts(
         boardList,
-        slopeTree);
+        slopeTree,
+        count);
   return count;
 }
 

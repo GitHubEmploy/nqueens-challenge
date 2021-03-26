@@ -29,7 +29,7 @@ function selectQueenRowFromConflictList (conflictList) {
 }
 
 function generateColumnConflictList(boardList, column) {
-  let slopeTree = generateSlopeTree(
+  let [slopeTree, count] = generateSlopeTree(
       removeWorkingColumnFromCombinationList(
           generateAllCombinations(boardList),
           column));
@@ -41,9 +41,10 @@ function generateColumnConflictList(boardList, column) {
   return conflictList;
 }
 
-function generateAllRowConflictsList(boardList, column) {
+function generateConflictCountFromEachPointInRow(boardList, column) {
   let combinationList = generateAllCombinations(boardList);
-  let slopeTree = generateSlopeTree(combinationList);
+  let revisedCombinationList = removeWorkingColumnFromCombinationList(combinationList);
+  let [slopeTree, count] = generateSlopeTree(revisedCombinationList);
   let conflictList = [];
   for (let row=0;row<boardList.length;++row) {
     let queenLocation = new point(column, row);
@@ -52,9 +53,9 @@ function generateAllRowConflictsList(boardList, column) {
   return conflictList;
 }
 
-function countWholeBoardConflicts(boardList, slopeTree, queenLocation) {
+function countWholeBoardConflicts(boardList, slopeTree, slopeTreeCount) {
   let combinationList = generateAllCombinations(boardList);
-  let count = 0;
+  let count = slopeTreeCount;
   for (let item=0;item<combinationList.length;++item) {
     let [pointA, pointB] = combinationList[item];
     let slopeIntercept = new slopeInterceptObject(
@@ -64,10 +65,6 @@ function countWholeBoardConflicts(boardList, slopeTree, queenLocation) {
       ++count;
     } else if ( slopeIntercept.slope === 0 ) {
       ++count;
-    } else {
-      if (slopeTree.find(slopeIntercept)) {
-        ++count;
-      }
     }
   }
   return count;
@@ -120,6 +117,7 @@ function countPointConflictsToMax(boardList, slopeTree, queenLocation, max) {
 
 function generateSlopeTree(combinationList) {
   let tree = new binaryNode();
+  let count = 0;
   let pointA = new point(0, 0);
   let pointB = new point(0, 0);
   for (let item=0;item<combinationList.length;++item) {
@@ -130,9 +128,11 @@ function generateSlopeTree(combinationList) {
     if (slopeIntercept == null ) {
       console.log("slopeIntercept was null");
     }
-    tree.add(slopeIntercept);
+    if (tree.add(slopeIntercept) === true ) {
+      count++;
+    }
   }
-  return tree;
+  return [tree, count];
 }
 
 
@@ -172,7 +172,7 @@ function removeWorkingColumnFromCombinationList(combinationList, column) {
 exports.placeQueenOnBoard = placeQueenOnBoard;
 exports.selectQueenRowFromConflictList = selectQueenRowFromConflictList;
 exports.generateColumnConflictList = generateColumnConflictList;
-exports.generateAllRowConflictsList = generateAllRowConflictsList;
+exports.generateConflictCountFromEachPointInRow = generateConflictCountFromEachPointInRow;
 exports.removeWorkingColumnFromCombinationList = removeWorkingColumnFromCombinationList;
 exports.generateAllCombinations = generateAllCombinations;
 exports.generateSlopeTree = generateSlopeTree;
