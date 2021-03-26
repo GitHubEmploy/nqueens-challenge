@@ -7,7 +7,7 @@ const output = require("./output.js");
 
 
 let size = 7;
-let maxRowChecks = 10;
+let maxRowChecks = 40;
 //             1,000
 let maxTries = 1;
 let maxRounds = 1;
@@ -34,7 +34,7 @@ for (let rounds=0;rounds<maxRounds;++rounds) {
           new point(
               column,
               boardFunctions.selectQueenRowFromConflictList(
-                  boardFunctions.generateColumnConflictList(
+                  boardFunctions.generateAllConflictList(
                       boardList,
                       column))));
     }

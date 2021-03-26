@@ -19,7 +19,7 @@ function selectQueenRowFromConflictList (conflictList) {
       listOfMins.push(i);
     }
   }
-  let myRandom = helperFunctions.randomInt(listOfMins.length-1)
+  let myRandom = helperFunctions.randomInt(listOfMins.length)
   return listOfMins[myRandom];
 }
 
@@ -36,9 +36,19 @@ function generateColumnConflictList(boardList, column) {
   return conflictList;
 }
 
+function generateAllConflictList(boardList, column) {
+  let combinationList = generateAllCombinations(boardList);
+  let slopeTree = generateSlopeTree(combinationList);
+  let conflictList = [];
+  for (let row=0;row<boardList.length;++row) {
+    let queenLocation = new point(column, row);
+    conflictList[row] = countConflicts(boardList, slopeTree, queenLocation);
+  }
+  return conflictList;
+}
 
 function countConflicts(boardList, slopeTree, queenLocation) {
-  let combinationList = generateSinglePointCombinations(boardList, queenLocation);
+  let combinationList = generateAllCombinations(boardList);
   let count = 0;
   for (let item=0;item<combinationList.length;++item) {
     let [pointA, pointB] = combinationList[item];
@@ -136,6 +146,7 @@ function removeWorkingColumnFromCombinationList(combinationList, column) {
 exports.placeQueenOnBoard = placeQueenOnBoard;
 exports.selectQueenRowFromConflictList = selectQueenRowFromConflictList;
 exports.generateColumnConflictList = generateColumnConflictList;
+exports.generateAllConflictList = generateAllConflictList;
 exports.removeWorkingColumnFromCombinationList = removeWorkingColumnFromCombinationList;
 exports.generateAllCombinations = generateAllCombinations;
 exports.generateSlopeTree = generateSlopeTree;
