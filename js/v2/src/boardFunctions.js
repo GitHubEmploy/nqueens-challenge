@@ -48,6 +48,24 @@ function generateConflictCountForEachPointInColumn(boardList, column) {
 
 // count the conflicts for the whole board
 // (n*n-1)/2
+function countWholeBoardConflictsv1(boardList, slopeTree, slopeTreeCount) {
+  let combinationList = generateAllCombinations(boardList);
+  let count = slopeTreeCount;
+  for (let item=0;item<combinationList.length;++item) {
+    let [pointA, pointB] = combinationList[item];
+    let slopeIntercept = new slopeInterceptObject(
+        computeSlope(pointA, pointB),
+        computeYIntercept(pointA, pointB));
+    if ( slopeIntercept.slope === 1 || slopeIntercept.slope === -1 ) {
+      ++count;
+    } else if ( slopeIntercept.slope === 0 ) {
+      ++count;
+    }
+  }
+  return count;
+}
+// count the conflicts for the whole board
+// (n*n-1)/2
 function countWholeBoardConflicts(boardList, slopeTree, slopeTreeCount, allCombinationsList) {
   let count = slopeTreeCount;
   for (let item=0;item<allCombinationList.length;++item) {
@@ -155,3 +173,4 @@ exports.removeWorkingColumnFromCombinationList = removeWorkingColumnFromCombinat
 exports.generateAllCombinations = generateAllCombinations;
 exports.generateSlopeTree = generateSlopeTree;
 exports.countWholeBoardConflicts = countWholeBoardConflicts;
+exports.countWholeBoardConflictsv1 = countWholeBoardConflictsv1;

@@ -6,10 +6,10 @@ const checks = require("./checks.js");
 const output = require("./output.js");
 
 
-let size = 500;
-let maxRowChecks = 10000;
+let size = 201;
+let maxRowChecks = 100000;
 //             100
-let maxRounds = 1000;
+let maxRounds = 100;
 let triesNeededForSolution = 0;
 let solutionsFound = 0;
 let totalRowChecksNeeded = 0;
@@ -34,7 +34,7 @@ for (let round=0;round<maxRounds;++round) {
       console.log("otherboardErrors", totalBoardErrors/rowCheck);
       break;
     }
-    if (rowCheck % 1000 === 0 ) {
+    if (rowCheck % 1000 === 1 ) {
       console.log("Error Average So far", totalBoardErrors/rowCheck, "current row check", rowCheck);
     }
     let column = helperFunctions.randomInt(size);

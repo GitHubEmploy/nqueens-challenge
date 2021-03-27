@@ -13,7 +13,7 @@ function isValidBoard(boardList) {
 function countTotalBoardConflicts(boardList) {
   let allCombinations = boardFunctions.generateAllCombinations(boardList);
   let [slopeTree, count] = boardFunctions.generateSlopeTree(allCombinations);
-  count = boardFunctions.countWholeBoardConflicts(
+  count = boardFunctions.countWholeBoardConflictsv1(
         boardList,
         slopeTree,
         count,
