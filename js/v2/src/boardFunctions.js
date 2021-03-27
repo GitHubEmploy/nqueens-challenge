@@ -1,12 +1,15 @@
 const helperFunctions = require("./helperFunctions.js");
 const {binaryNode} = require("./binaryNode.js");
 const {point,computeSlope,computeYIntercept} = require("./point.js");
-const {slopeInterceptObject} = require("./slopeInterceptObject");
+const {slopeInterceptObject} = require("./slopeInterceptObject.js");
 
 function placeQueenOnBoard(boardList, location) {
   return boardList[location.x] = location.y;
 }
 
+
+// select the row to put a queen in from a list of point conflicts in an entire row
+// O(n)
 function selectQueenRowFromConflictList (conflictList) {
   let listOfMins = [];
   // the conflicts list will be of size n
@@ -28,22 +31,12 @@ function selectQueenRowFromConflictList (conflictList) {
   return listOfMins[myRandom];
 }
 
-function generateColumnConflictList(boardList, column) {
-  let [slopeTree, count] = generateSlopeTree(
-      removeWorkingColumnFromCombinationList(
-          generateAllCombinations(boardList),
-          column));
-  let conflictList = [];
-  for (let row=0;row<boardList.length;++row) {
-    let queenLocation = new point(column, row);
-    conflictList[row] = countSinglePointConflicts(boardList, slopeTree, queenLocation);
-  }
-  return conflictList;
-}
 
-function generateConflictCountFromEachPointInRow(boardList, column) {
+// count conflicts for each point in column
+// (n*n-1)/2 + (n*n-1)/2 + (n*n-1)/2 + n^2
+function generateConflictCountForEachPointInColumn(boardList, column) {
   let combinationList = generateAllCombinations(boardList);
-  let revisedCombinationList = removeWorkingColumnFromCombinationList(combinationList);
+  let revisedCombinationList = removeWorkingColumnFromCombinationList(combinationList, column);
   let [slopeTree, count] = generateSlopeTree(revisedCombinationList);
   let conflictList = [];
   for (let row=0;row<boardList.length;++row) {
@@ -53,11 +46,12 @@ function generateConflictCountFromEachPointInRow(boardList, column) {
   return conflictList;
 }
 
-function countWholeBoardConflicts(boardList, slopeTree, slopeTreeCount) {
-  let combinationList = generateAllCombinations(boardList);
+// count the conflicts for the whole board
+// (n*n-1)/2
+function countWholeBoardConflicts(boardList, slopeTree, slopeTreeCount, allCombinationsList) {
   let count = slopeTreeCount;
-  for (let item=0;item<combinationList.length;++item) {
-    let [pointA, pointB] = combinationList[item];
+  for (let item=0;item<allCombinationList.length;++item) {
+    let [pointA, pointB] = allCombinationList[item];
     let slopeIntercept = new slopeInterceptObject(
         computeSlope(pointA, pointB),
         computeYIntercept(pointA, pointB));
@@ -70,6 +64,8 @@ function countWholeBoardConflicts(boardList, slopeTree, slopeTreeCount) {
   return count;
 }
 
+// count conflicts compared to passed in point, ie how many conflicts a single point has
+// n + (n * log(n))
 function countSinglePointConflicts(boardList, slopeTree, queenLocation) {
   let combinationList = generateSinglePointCombinations(boardList, queenLocation);
   let count = 0;
@@ -91,30 +87,8 @@ function countSinglePointConflicts(boardList, slopeTree, queenLocation) {
   return count;
 }
 
-function countPointConflictsToMax(boardList, slopeTree, queenLocation, max) {
-  let combinationList = generateSinglePointCombinations(boardList, queenLocation);
-  let count = 0;
-  for (let item=0;item<combinationList.length;++item) {
-    let [pointA, pointB] = combinationList[item];
-    let slopeIntercept = new slopeInterceptObject(
-        computeSlope(pointA, pointB),
-        computeYIntercept(pointA, pointB));
-    if ( slopeIntercept.slope === 1 || slopeIntercept.slope === -1 ) {
-      ++count;
-    } else if ( slopeIntercept.slope === 0 ) {
-      ++count;
-    } else {
-      if (slopeTree.find(slopeIntercept)) {
-        ++count;
-      }
-    }
-    if (count > max) {
-      break;
-    }
-  }
-  return count;
-}
-
+// generates tree that is used to find conflicts sorted via slope/yintercept
+// O((n*n-1)/2) * log n
 function generateSlopeTree(combinationList) {
   let tree = new binaryNode();
   let count = 0;
@@ -135,7 +109,8 @@ function generateSlopeTree(combinationList) {
   return [tree, count];
 }
 
-
+// generate every combination for every point on the board will return an array (n*n-1)/2 large
+// O((n*n-1)/2)
 function generateAllCombinations(boardList) {
   let combinationList = [];
   for (let i=0;i<boardList.length;++i) {
@@ -148,6 +123,8 @@ function generateAllCombinations(boardList) {
   return combinationList;
 }
 
+// generate the combination of one point with every other point, returns a combination list of size n-1
+// O(n)
 function generateSinglePointCombinations(boardList, comparePoint) {
   let combinationList = [];
   for (let i=0;i<boardList.length;++i) {
@@ -160,6 +137,8 @@ function generateSinglePointCombinations(boardList, comparePoint) {
 }
 
 
+//removes a column from a combination list, resulting in the removal of n-1 items from the combination list
+// O((n*n-1)/2)
 function removeWorkingColumnFromCombinationList(combinationList, column) {
   return combinationList.filter((item) => { 
     let [pointA, pointB] = item;
@@ -171,8 +150,7 @@ function removeWorkingColumnFromCombinationList(combinationList, column) {
 }
 exports.placeQueenOnBoard = placeQueenOnBoard;
 exports.selectQueenRowFromConflictList = selectQueenRowFromConflictList;
-exports.generateColumnConflictList = generateColumnConflictList;
-exports.generateConflictCountFromEachPointInRow = generateConflictCountFromEachPointInRow;
+exports.generateConflictCountForEachPointInColumn = generateConflictCountForEachPointInColumn;
 exports.removeWorkingColumnFromCombinationList = removeWorkingColumnFromCombinationList;
 exports.generateAllCombinations = generateAllCombinations;
 exports.generateSlopeTree = generateSlopeTree;

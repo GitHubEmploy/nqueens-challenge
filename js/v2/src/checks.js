@@ -3,13 +3,24 @@ const {point} = require("./point.js");
 
 
 function isValidBoard(boardList) {
-  let [slopeTree, count] = boardFunctions.generateSlopeTree(
-                  boardFunctions.generateAllCombinations(boardList));
+  if (countTotalBoardConflicts(boardList) === 0 ) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function countTotalBoardConflicts(boardList) {
+  let allCombinations = boardFunctions.generateAllCombinations(boardList);
+  let [slopeTree, count] = boardFunctions.generateSlopeTree(allCombinations);
   count = boardFunctions.countWholeBoardConflicts(
         boardList,
         slopeTree,
-        count);
+        count,
+        allCombinations);
   return count;
 }
 
+
 exports.isValidBoard = isValidBoard;
+exports.countTotalBoardConflicts = countTotalBoardConflicts;
