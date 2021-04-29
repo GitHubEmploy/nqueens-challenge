@@ -6,16 +6,16 @@ const checks = require("./checks.js");
 const output = require("./output.js");
 
 
-let size = 31;
+let size = 51;
 let maxRowChecks = 100000;
 //             100
-let maxRounds = 100;
+let maxRounds = 200;
 let triesNeededForSolution = 0;
 let solutionsFound = 0;
 let totalRowChecksNeeded = 0;
 let totalBoardErrors = 0;
 
-let restartCutoff = 0.97;
+let restartCutoff = 0.94;
 
 let boardlist = [];
 
