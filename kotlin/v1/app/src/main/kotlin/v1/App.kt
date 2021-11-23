@@ -8,30 +8,125 @@ import com.github.ajalt.clikt.core.subcommands
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.multiple
 import com.github.ajalt.clikt.parameters.types.int
+import java.time.ZonedDateTime
+import kotlin.random.Random
 
-class App: CliktCommand(){
-    fun check() {
-       TODO( "print results of 'countAllConflicts()' if greater than 0 print details")
-    }
-    private fun countAllConflicts() {
-        TODO(" calls 'countConflicts()' on each queen position")
-        //for (column in boardList) {
-        //    countConflicts(boardList, column)
-        //}
-    }
-    override fun run() {
+class App : CliktCommand() {
+	override fun run() {}
 
-    }
+	companion object {
+		/**
+		 * Return true if this is a valid n-queens solution
+		 */
+		private fun checkBoard(board: List<Int>): Boolean {
+			TODO("Your mother")
+		}
 
+		enum class PrintOptions {
+			SLIM,
+			FULL
+		}
+
+		/**
+		 * Nicely prints the board
+		 */
+		private fun printBoard(board: List<Int>, printAs: PrintOptions = PrintOptions.SLIM) {
+			when (printAs) {
+				PrintOptions.SLIM -> {
+					TODO("Print the board as a list of row offsets, machine friendly (each has plus 1 to align with hackerrank format)")
+				}
+				PrintOptions.FULL -> {
+					TODO("Print the board as a grid of chess positions that are empty or queens, more human friendly until the board gets huge")
+				}
+			}
+		}
+	}
+
+	class CheckSubCommand : CliktCommand(
+		name = "check"
+	) {
+		val boardList: List<Int> by argument().int().multiple(required = true)
+		override fun run() {
+			println("checking...")
+		}
+	}
+
+	class SolveSubCommand : CliktCommand(
+		name = "solve"
+	) {
+
+		val size by argument(help = "The size² of the board").int()
+
+		private val random = Random(ZonedDateTime.now().toEpochSecond())
+
+		private val globalSlopeCache: HashMap<SlopeIntercept, Set<HashmapEntry>> = hashMapOf()
+
+		/**
+		 * A list of row offsets for every column
+		 */
+		private val board: List<Int> = listOf()
+
+		private fun countAllConflicts(): Int {
+			TODO(" calls 'countAllConflicts()' on each queen position")
+		}
+
+		/**
+		 * Place a piece at row: [row] and column: [col]
+		 */
+		private fun placePiece(row: Int, col: Int) {
+			// Modify global slopes, replace any instances that included this column with the new values
+		}
+
+		/**
+		 * Count the total conflicts for every row in [column]
+		 */
+		private fun countConflictsInColumn(column: Int): List<Int> {
+			return (0 until size).map { row ->
+				var conflictCount = 0
+
+				for (col in 0 until size) {
+					// Skip this column if its the same
+					if (col == column) continue
+
+					// Get slope intercept
+					globalSlopeCache[
+							Util.getInterceptObject(
+								Point(column, board[column]),
+								Point(col, row)
+							)
+					]?.let { conflictCount++ }
+				}
+
+				return@map conflictCount
+			}
+		}
+
+		private fun selectBestRow(conflicts: List<Int>): Int {
+			return conflicts.withIndex()
+				.sortedBy { it.value } // The value is a # of conflicts
+				.let { sortedList ->
+					sortedList.filter { it.value == sortedList[0].value }
+				}
+				.random(random)
+				.index // This is a row
+		}
+
+		override fun run() {
+			// loop until solved then break
+			while (true) {
+				repeat(1000) {
+					val col: Int = random.nextInt(size)
+					val listOfRowConflictCount: List<Int> = countConflictsInColumn(col)
+
+					placePiece(selectBestRow(listOfRowConflictCount), col)
+					if (checkBoard(board)) {
+						printBoard(board)
+						return
+					}
+				}
+			}
+		}
+	}
 }
 
-class CheckSubCommand: CliktCommand(
-    name = "check"
-) {
-    val boardList: List<Int> by argument().int().multiple(required=true)
-    override fun run() {
-        println("checking...")
-    }
-}
-
-fun main(args: Array<String>) = App().subcommands(CheckSubCommand()).main(args)
+fun main(args: Array<String>) = App().subcommands(App.SolveSubCommand(), App.CheckSubCommand()).main(args)
