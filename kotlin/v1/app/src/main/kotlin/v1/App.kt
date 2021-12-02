@@ -8,6 +8,7 @@ import com.github.ajalt.clikt.core.subcommands
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.multiple
 import com.github.ajalt.clikt.parameters.types.int
+import java.lang.Integer.sum
 import java.time.ZonedDateTime
 import kotlin.random.Random
 
@@ -67,14 +68,52 @@ class App : CliktCommand() {
 		private val board: List<Int> = listOf()
 
 		private fun countAllConflicts(): Int {
-			TODO(" calls 'countAllConflicts()' on each queen position")
+			return (0 until size).sumOf { column ->
+				countConflicts(column)
+			}
 		}
 
 		/**
 		 * Place a piece at row: [row] and column: [col]
 		 */
-		private fun placePiece(row: Int, col: Int) {
+		private fun placePiece(row: Int, column: Int) {
+			// loop for every column that isn't the working column
+			for (otherColumn in 0 until size) {
+				// Skip this column if its the same as the passed in column
+				if (otherColumn == column) continue
+
+				// Get slope intercept of looped point and passed in point
+				var slopeIntercept = Util.getSlopeInterceptObject(
+							Point(board[otherColumn], otherColumn),
+							Point(board[column], column)
+						)
+				if (globalSlopeCache[slopeIntercept]) {
+					globalSlopeCache[slopeIntercept].count++
+				}
+				else {
+					globalSlopeCache[slopeIntercept] = HashmapEntry(0)
+				}
+			}
 			// Modify global slopes, replace any instances that included this column with the new values
+		}
+
+
+		private fun countConflicts(column: Int): Int {
+			var conflictCount = 0
+			// loop for every column that isn't the working column
+			for (otherColumn in 0 until size) {
+				// Skip this column if its the same as the passed in column
+				if (otherColumn == column) continue
+
+				// Get slope intercept of looped point and passed in point
+				globalSlopeCache[
+						Util.getSlopeInterceptObject(
+							Point(board[otherColumn], otherColumn),
+							Point(board[column], column)
+						)
+				]?.let { conflictCount++ }
+			}
+			return conflictCount
 		}
 
 		/**
@@ -84,15 +123,15 @@ class App : CliktCommand() {
 			return (0 until size).map { row ->
 				var conflictCount = 0
 
-				for (col in 0 until size) {
+				for (otherColumn in 0 until size) {
 					// Skip this column if its the same
-					if (col == column) continue
+					if (otherColumn == column) continue
 
 					// Get slope intercept
 					globalSlopeCache[
-							Util.getInterceptObject(
-								Point(column, board[column]),
-								Point(col, row)
+							Util.getSlopeInterceptObject(
+								Point(board[otherColumn], otherColumn),
+								Point(row, otherColumn)
 							)
 					]?.let { conflictCount++ }
 				}
